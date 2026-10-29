@@ -91,10 +91,14 @@ function znachenie(el) {
   return el.getAttribute('aria-checked') !== 'true';
 }
 
-$('[data-spisok]').addEventListener('change', (e) => {
+// Цена берётся на каждой цифре (input). Одного change мало: на iPhone он приходит только после ухода из поля,
+// а у цифровой клавиатуры нет «Готово», и «Сохранить» оставалась серой.
+// Поле, убранное перерисовкой («Отменить», «Сохранить»), шлёт change при уходе фокуса: его не слушаем, иначе правка вернётся.
+const pravka = (e) => {
   const el = e.target.closest('[data-pole]');
-  if (el && el.tagName !== 'BUTTON') postavit(el.closest('.adm-vesh').dataset.id, el.dataset.pole, znachenie(el));
-});
+  if (el && el.isConnected && el.tagName !== 'BUTTON') postavit(el.closest('.adm-vesh').dataset.id, el.dataset.pole, znachenie(el));
+};
+['input', 'change'].forEach((s) => $('[data-spisok]').addEventListener(s, pravka));
 $('[data-spisok]').addEventListener('click', (e) => {
   const el = e.target.closest('button[data-pole]');
   if (!el) return;
