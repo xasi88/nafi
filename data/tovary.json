@@ -8,7 +8,7 @@
       "ot": 36,
       "do": 120,
       "cena": 2600,
-      "skidka": 0,
+      "skidka": 10,
       "hit": false,
       "prodano": false
     },
@@ -20,7 +20,7 @@
       "ot": 24,
       "do": 120,
       "cena": 2500,
-      "skidka": 0,
+      "skidka": 30,
       "hit": false,
       "prodano": false
     },
@@ -58,7 +58,7 @@
       "cena": 1800,
       "skidka": 0,
       "hit": false,
-      "prodano": false
+      "prodano": true
     },
     {
       "id": "kostyum-haki",
@@ -92,8 +92,8 @@
       "ot": 24,
       "do": 96,
       "cena": 1800,
-      "skidka": 0,
-      "hit": false,
+      "skidka": 10,
+      "hit": true,
       "prodano": false
     },
     {
