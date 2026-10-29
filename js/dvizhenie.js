@@ -32,8 +32,9 @@ function arka(spisok) {
   let i = 0;
   const pokaz = () => {
     imgs.forEach((im, k) => im.classList.toggle('aktiv', k === i));
-    zamenit(name, spisok[i].name);
-    zamenit(info, `${spisok[i].vozrast}, ${cenaText(spisok[i])}`);
+    // Подпись меняется, когда новое фото уже проявилось наполовину
+    const t = spisok[i];
+    setTimeout(() => { zamenit(name, t.name); zamenit(info, `${t.vozrast}, ${cenaText(t)}`); }, name.textContent ? 450 : 0);
   };
   pokaz();
   if (!TIHO) setInterval(() => {
