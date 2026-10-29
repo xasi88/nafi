@@ -4,6 +4,7 @@
 .adm-shapka img { height: 48px; width: auto; }
 .adm-shapka h1 { font: 400 24px/1.15 var(--z); }
 .adm-status { color: var(--seryj); font-size: 14px; }
+.adm-na-sajt { margin-left: auto; flex: none; min-height: 44px; display: inline-flex; align-items: center; padding: 0 14px; border: 1px solid var(--liniya); border-radius: 4px; font-weight: 500; }
 .ssylka-mal { min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--zoloto-t); font: 500 14px var(--s); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 
 .dostup { max-width: 640px; margin: 16px; padding: 20px; border: 1px solid var(--zoloto); border-radius: var(--r); display: grid; gap: 12px; }
