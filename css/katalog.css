@@ -5,13 +5,13 @@
 .schet { color: var(--seryj); }
 .vozrasty { display: flex; gap: 8px; margin: 20px -16px 28px; padding: 0 16px; overflow-x: auto; scrollbar-width: none; }
 .vozrasty::-webkit-scrollbar { display: none; }
-.vozrasty button { position: relative; flex: none; min-height: 48px; padding: 0 20px; border: 1px solid var(--liniya); border-radius: 4px; background: none; cursor: pointer; transition: border-color .3s, color .3s, transform .3s var(--pruzhina); }
-.vozrasty button::before { content: ''; position: absolute; inset: -1px; border-radius: 4px; background: var(--knopka-fon); transform: scaleY(0); transform-origin: bottom; transition: transform .45s var(--plavno); z-index: -1; }
-.vozrasty button { z-index: 0; isolation: isolate; }
-.vozrasty button:hover { border-color: var(--zoloto); }
-.vozrasty button:active { transform: scale(.95); }
-.vozrasty button[aria-pressed="true"] { border-color: var(--knopka-fon); color: var(--knopka-tekst); font-weight: 600; }
-.vozrasty button[aria-pressed="true"]::before { transform: scaleY(1); }
+.vozrasty button, .tovar-razmery button { position: relative; flex: none; min-height: 48px; padding: 0 20px; border: 1px solid var(--liniya); border-radius: 4px; background: none; cursor: pointer; transition: border-color .3s, color .3s, transform .3s var(--pruzhina); }
+.vozrasty button::before, .tovar-razmery button::before { content: ''; position: absolute; inset: -1px; border-radius: 4px; background: var(--knopka-fon); transform: scaleY(0); transform-origin: bottom; transition: transform .45s var(--plavno); z-index: -1; }
+.vozrasty button, .tovar-razmery button { z-index: 0; isolation: isolate; }
+.vozrasty button:hover, .tovar-razmery button:hover { border-color: var(--zoloto); }
+.vozrasty button:active, .tovar-razmery button:active { transform: scale(.95); }
+.vozrasty button[aria-pressed="true"], .tovar-razmery button[aria-pressed="true"] { border-color: var(--knopka-fon); color: var(--knopka-tekst); font-weight: 600; }
+.vozrasty button[aria-pressed="true"]::before, .tovar-razmery button[aria-pressed="true"]::before { transform: scaleY(1); }
 
 .setka { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 14px; perspective: 1200px; }
 .tovar { position: relative; --rx: 0deg; --ry: 0deg;
@@ -31,6 +31,12 @@
 .tovar h3 { font: 500 15px/1.3 var(--s); }
 .tovar-vozrast { color: var(--seryj); font-size: 14px; }
 .tovar-cena { margin-top: 4px; font: 400 17px var(--z); color: var(--zoloto-t); }
+/* Размер в карточке: кнопки как у возраста, только меньше. Ряд листается пальцем до правого края карточки. */
+.tovar-razmery { display: flex; align-items: center; gap: 6px; margin: 8px -52px 0 0; overflow-x: auto; scrollbar-width: none; }
+.tovar-razmery::-webkit-scrollbar { display: none; }
+.tovar-razmery button { min-width: 44px; min-height: 44px; padding: 0 8px; font-size: 14px; }
+/* Цена под размерами на высоте кнопки WhatsApp: кнопка не налезает на ряд размеров */
+.tovar-razmery + .tovar-cena { min-height: 44px; margin-top: 0; padding-top: 10px; }
 .tovar-wa { position: absolute; right: 0; bottom: 0; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--zoloto); color: var(--zoloto-t); transition: background .3s, color .3s, transform .35s var(--pruzhina); }
 .tovar-wa:hover { background: var(--zoloto); color: var(--fon); transform: scale(1.08); }
 .tovar-wa svg { width: 20px; height: 20px; }

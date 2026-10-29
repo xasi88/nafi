@@ -35,6 +35,13 @@
 .pereklyuchatel[aria-checked="true"] span { background: var(--zoloto); }
 .pereklyuchatel[aria-checked="true"] span::after { transform: translateX(16px); }
 
+/* Размеры в наличии: отмеченный залит, как кнопка возраста на сайте */
+.adm-razmery { grid-column: 1 / -1; display: grid; gap: 6px; font-size: 13px; color: var(--seryj); }
+.adm-razmery div { display: flex; flex-wrap: wrap; gap: 6px; }
+.adm-razmery button { min-width: 52px; min-height: 44px; padding: 0 8px; border: 1px solid var(--liniya); border-radius: 8px; background: var(--fon); color: var(--tekst); font: 500 15px var(--s); cursor: pointer; transition: background .3s, color .3s, border-color .3s, transform .3s var(--pruzhina); }
+.adm-razmery button:active { transform: scale(.94); }
+.adm-razmery button[aria-pressed="true"] { border-color: var(--knopka-fon); background: var(--knopka-fon); color: var(--knopka-tekst); font-weight: 600; }
+
 .adm-novoe { max-width: 1100px; margin: 8px auto 0; padding: 0 16px; color: var(--seryj); font-size: 14px; }
 
 .adm-niz { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; gap: 10px; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--fon-2); border-top: 1px solid var(--liniya); }

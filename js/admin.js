@@ -1,6 +1,6 @@
 // Страница Миланы: цена, скидка, «Хит продаж», «Продано». Сохранение одним коммитом в data/tovary.json.
 // Новые вещи сюда не добавляются: их добавляет Claude через код. Устройство: docs/ARCHITECTURE.md, «Страница Миланы».
-import { PUT, SKIDKI, zagruzit, rub, cenaSeychas, slit, oshibka } from './dannye.js';
+import { PUT, SKIDKI, zagruzit, rub, cenaSeychas, slit, oshibka, razmery, razmeryVozrasta } from './dannye.js';
 import { repo, proverit, prochitat, zapisat } from './github.js';
 
 const KLYUCH = 'nafi-klyuch', CHERNOVIK = 'nafi-pravki';
@@ -17,6 +17,9 @@ let pravki = {};     // id -> { поле: новое значение }, тол�
 const ishod = (id) => dannye.tovary.find((t) => t.id === id);
 const sejchas = (id) => ({ ...ishod(id), ...(pravki[id] || {}) });
 const chislo = () => Object.values(pravki).reduce((n, p) => n + Object.keys(p).length, 0);
+// Поле для сравнения: у вещи без размеров пустой список. Списки сравниваются по содержимому.
+const znachPolya = (t, pole) => (pole === 'razmery' ? razmery(t) : t[pole]);
+const ravno = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 function tost(text, ploho = false) {
   const t = $('[data-tost]');
@@ -38,6 +41,8 @@ function stroka(id) {
   const t = sejchas(id);
   const pravlena = !!pravki[id];
   const sw = (pole, text) => `<button type="button" class="pereklyuchatel" role="switch" aria-checked="${!!t[pole]}" data-pole="${pole}"><span aria-hidden="true"></span>${text}</button>`;
+  const est = razmery(t);
+  const spisok = [...new Set([...razmeryVozrasta(t), ...est])].sort((a, b) => a - b);
   return `<article class="adm-vesh${pravlena ? ' pravlena' : ''}${t.prodano ? ' prodano' : ''}" data-id="${id}">
     <img src="${t.foto}" alt="" width="640" height="800" loading="lazy">
     <div class="adm-info">
@@ -50,6 +55,9 @@ function stroka(id) {
       <label class="pole">Скидка<select data-pole="skidka">${SKIDKI.map((s) => `<option value="${s}"${s === t.skidka ? ' selected' : ''}>${s ? s + '%' : 'нет'}</option>`).join('')}</select></label>
       ${sw('hit', 'Хит продаж')}
       ${sw('prodano', 'Продано')}
+      <div class="adm-razmery"><span>Размеры в наличии, рост в см</span>
+        <div role="group" aria-label="Размеры в наличии">${spisok.map((r) => `<button type="button" aria-pressed="${est.includes(r)}" data-razmer="${r}">${r}</button>`).join('')}</div>
+      </div>
     </div>
   </article>`;
 }
@@ -79,7 +87,7 @@ function niz() {
 // Новое значение поля: правка остаётся, только если отличается от файла
 function postavit(id, pole, znach) {
   const p = { ...(pravki[id] || {}) };
-  if (ishod(id)[pole] === znach) delete p[pole]; else p[pole] = znach;
+  if (ravno(znachPolya(ishod(id), pole), znach)) delete p[pole]; else p[pole] = znach;
   if (Object.keys(p).length) pravki[id] = p; else delete pravki[id];
   obnovitStroku(id);
 }
@@ -100,6 +108,13 @@ const pravka = (e) => {
 };
 ['input', 'change'].forEach((s) => $('[data-spisok]').addEventListener(s, pravka));
 $('[data-spisok]').addEventListener('click', (e) => {
+  // Размер: нажатие отмечает или снимает, список держится по порядку
+  const r = e.target.closest('button[data-razmer]');
+  if (r) {
+    const id = r.closest('.adm-vesh').dataset.id, n = Number(r.dataset.razmer), est = razmery(sejchas(id));
+    r.setAttribute('aria-pressed', !est.includes(n));
+    return postavit(id, 'razmery', est.includes(n) ? est.filter((x) => x !== n) : [...est, n].sort((a, b) => a - b));
+  }
   const el = e.target.closest('button[data-pole]');
   if (!el) return;
   const v = znachenie(el);
@@ -176,7 +191,7 @@ async function start() {
     pravki = {};
     for (const [id, p] of Object.entries(cher)) {
       if (!ishod(id)) continue;
-      for (const [k, v] of Object.entries(p)) if (ishod(id)[k] !== v) (pravki[id] ||= {})[k] = v;
+      for (const [k, v] of Object.entries(p)) if (!ravno(znachPolya(ishod(id), k), v)) (pravki[id] ||= {})[k] = v;
     }
   } catch { pravki = {}; }
   status();

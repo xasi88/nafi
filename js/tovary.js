@@ -1,5 +1,5 @@
-// NAFI: карточки вещей, фильтр по возрасту, заказ в WhatsApp. Вещи берутся из data/tovary.json (js/dannye.js).
-import { zagruzit, rub, cenaSeychas, cenaText } from './dannye.js';
+// NAFI: карточки вещей, фильтр по возрасту, выбор размера, заказ в WhatsApp. Вещи берутся из data/tovary.json (js/dannye.js).
+import { zagruzit, rub, cenaSeychas, cenaText, razmery } from './dannye.js';
 
 const WA = '79280080809';
 let TOVARY = [];
@@ -15,10 +15,11 @@ const VOZRASTY = [
 export const tovar = (id) => TOVARY.find((t) => t.id === id);
 export { cenaText };
 
-export function waLink(t) {
+// Размер выбран: он идёт в сообщение вместо вопроса о размерах
+export function waLink(t, razmer) {
   const c = t && cenaSeychas(t);
   const msg = t
-    ? `Здравствуйте! Хочу заказать: ${t.name}, ${t.vozrast}${c ? ', ' + rub(c) : ''}. Какие размеры есть?`
+    ? `Здравствуйте! Хочу заказать: ${t.name}, ${razmer ? `размер ${razmer}` : t.vozrast}${c ? ', ' + rub(c) : ''}.${razmer ? '' : ' Какие размеры есть?'}`
     : 'Здравствуйте! Хочу подобрать одежду в NAFI.';
   return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
 }
@@ -51,6 +52,7 @@ function kartochka(t) {
     <div class="tovar-tekst">
       <h3>${t.name}</h3>
       <p class="tovar-vozrast">${t.vozrast}</p>
+      ${!t.prodano && razmery(t).length ? `<div class="tovar-razmery" role="group" aria-label="Размер, рост в см">${razmery(t).map((r) => `<button type="button" aria-pressed="false" data-razmer="${r}">${r}</button>`).join('')}</div>` : ''}
       <p class="tovar-cena">${cenaHtml(t)}</p>
     </div>
     ${t.prodano ? '' : `<a class="tovar-wa" href="${waLink(t)}" target="_blank" rel="noopener" aria-label="Заказать в WhatsApp: ${t.name}">${WA_ICON}</a>`}
@@ -113,3 +115,12 @@ ryad.addEventListener('click', (e) => {
   if (b && b.getAttribute('aria-pressed') !== 'true') vybratVozrast(b.dataset.vozrast);
 });
 document.querySelectorAll('[data-wa]').forEach((a) => { a.href = waLink(); });
+
+// Размер в карточке: один на выбор, второе нажатие снимает. Обе ссылки заказа берут выбранный размер.
+document.querySelector('[data-setka]').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-razmer]');
+  if (!b) return;
+  const k = b.closest('.tovar'), t = tovar(k.dataset.id), vybran = b.getAttribute('aria-pressed') !== 'true';
+  k.querySelectorAll('[data-razmer]').forEach((x) => x.setAttribute('aria-pressed', x === b && vybran));
+  k.querySelectorAll('.tovar-foto[href], .tovar-wa').forEach((a) => { a.href = waLink(t, vybran ? b.dataset.razmer : null); });
+});
