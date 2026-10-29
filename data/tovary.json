@@ -9,7 +9,7 @@
       "do": 120,
       "cena": 2600,
       "skidka": 0,
-      "hit": true,
+      "hit": false,
       "prodano": false
     },
     {
