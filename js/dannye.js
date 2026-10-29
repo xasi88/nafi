@@ -24,7 +24,8 @@ export async function zagruzit(put = PUT) {
   return r.json();
 }
 
-export const rub = (n) => n.toLocaleString('ru-RU') + ' ₽';
+// Неразрывный пробел: «₽» не уходит на новую строку без числа
+export const rub = (n) => n.toLocaleString('ru-RU') + '\u00a0₽';
 
 // Цена со скидкой, вниз до десятка рублей
 export function cenaSeychas(t) {
