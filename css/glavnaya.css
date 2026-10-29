@@ -1,0 +1,90 @@
+/* Первый экран: светлая тема (арка) и тёмная (витрина), прогулка по линии земли, камера при прокрутке.
+   --sy: прокрутка в пикселях, ставит js/dvizhenie.js. Раскадровка: docs/Раскадровка движения.md */
+.glavnaya { position: relative; overflow-x: clip; max-width: 1280px; margin: 0 auto; padding: 28px clamp(16px, 4vw, 56px) 120px; }
+.glavnaya-tma { display: none; }
+[data-tema="tma"] .glavnaya-svet { display: none; }
+[data-tema="tma"] .glavnaya-tma { display: block; }
+
+/* Камера: текст уходит быстрее, арка медленнее, земля стоит */
+.sloj-tekst { transform: translate3d(0, calc(var(--sy) * -.22px), 0); opacity: calc(1 - var(--sy) / 700); will-change: transform; }
+.sloj-arka { will-change: transform; }
+
+/* Заголовок: слова встают из-под маски по очереди */
+h1 { font: 400 clamp(34px, 5.2vw, 64px)/1.08 var(--z); letter-spacing: -.01em; text-wrap: balance; }
+.js h1[data-slova] { visibility: hidden; }
+.js h1.razbit { visibility: visible; }
+.slovo { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.slovo > span { display: inline-block; transform: translateY(105%); animation: slovo 1s var(--plavno) forwards; animation-delay: calc(.15s + var(--n) * 70ms); }
+.podzag { margin-top: 16px; max-width: 30em; color: var(--seryj); font-size: 17px; opacity: 0; transform: translateY(16px); animation: vverh .9s .55s var(--plavno) forwards; }
+
+/* Смена подписи: старое уходит вверх, новое встаёт снизу */
+.smena { display: block; animation: smena .7s var(--plavno); }
+
+/* ===== Светлая: арка ===== */
+.glavnaya-svet { display: grid; gap: 28px; }
+.glavnaya-svet h1 { color: var(--tekst); }
+.glavnaya-svet h1 .slovo:nth-last-child(-n+4) > span { color: var(--zoloto-t); }
+.glavnaya-knopki { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 26px; opacity: 0; transform: translateY(16px); animation: vverh .9s .7s var(--plavno) forwards; }
+.arka-svet { position: relative; justify-self: center; width: min(100%, 420px); }
+.arka-okno { position: relative; aspect-ratio: 4 / 5; border-radius: 999px 999px var(--r) var(--r); overflow: hidden; background: var(--fon-2); clip-path: inset(100% 0 0 0 round 999px 999px var(--r) var(--r)); animation: zanaves 1.4s .3s var(--plavno) forwards; }
+.arka-okno img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.14); transition: opacity 1.2s ease, transform 5s ease-out; }
+.arka-okno img.aktiv { opacity: 1; transform: scale(1); }
+.arka-podpis { position: absolute; left: -14px; bottom: 30px; min-width: 190px; padding: 12px 18px; background: var(--fon); border-radius: 4px; box-shadow: var(--ten); font-size: 14px; overflow: hidden; opacity: 0; animation: vverh .8s 1.2s var(--plavno) forwards; transform: translateY(12px); }
+.arka-podpis b { font: 400 18px/1.25 var(--z); }
+.arka-podpis span { color: var(--zoloto-t); }
+
+/* ===== Тёмная: витрина в глубину ===== */
+.glavnaya-tma { text-align: center; perspective: 1400px; }
+.glavnaya-tma .podzag { margin-inline: auto; }
+.vitrina { position: relative; height: clamp(360px, 62vw, 560px); margin-top: 26px; touch-action: pan-y; user-select: none; perspective: 1200px;
+  transform: rotateX(calc(var(--sy) * .018deg)); transform-origin: 50% 100%; }
+.svet { position: absolute; left: 50%; top: -60px; width: min(96vw, 760px); height: calc(100% + 80px); transform: translateX(-50%); pointer-events: none;
+  background: radial-gradient(ellipse 36% 52% at 50% 44%, rgba(226, 200, 144, .32), transparent 70%), conic-gradient(from 180deg at 50% -12%, transparent 160deg, rgba(226, 200, 144, .13) 171deg, rgba(226, 200, 144, .13) 189deg, transparent 200deg);
+  animation: svet 2s .4s ease-out both; }
+.svet.vspyshka { animation: vspyshka .9s ease-out; }
+.vitrina-lenta { position: absolute; inset: 0; transform-style: preserve-3d; }
+.arka { position: absolute; left: 50%; top: 0; height: 100%; aspect-ratio: 4 / 5; max-width: 74vw; border-radius: 999px 999px var(--r) var(--r); overflow: hidden; background: var(--fon-2); cursor: pointer;
+  transform: translateX(calc(-50% + var(--d, 0) * 66%)) translateZ(calc(var(--ad, 0) * -240px)) rotateY(calc(var(--d, 0) * -26deg));
+  filter: brightness(.4) saturate(.75); transition: transform 1s var(--plavno), filter 1s var(--plavno), opacity .7s; z-index: 1; }
+.arka.centr { filter: none; z-index: 2; box-shadow: var(--ten); cursor: default; }
+.arka.skryt { opacity: 0; pointer-events: none; }
+.arka img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.vitrina-lenta.dvizh .arka img { animation: razmytie .7s ease-out; }
+.vitrina-lenta.vhod .arka { transform: translateX(calc(-50% + var(--d, 0) * 120%)) translateY(60px) translateZ(-300px) rotateY(calc(var(--d, 0) * -50deg)); filter: brightness(0); }
+.strelka { position: absolute; top: 50%; z-index: 3; width: 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--liniya); background: rgba(23, 18, 14, .7); cursor: pointer; transition: border-color .3s, transform .3s var(--pruzhina); }
+.strelka:hover { border-color: var(--zoloto); }
+.strelka:active { transform: scale(.9); }
+.strelka svg { width: 22px; height: 22px; fill: none; stroke: var(--zoloto-t); stroke-width: 1.6; }
+.strelka-l { left: 0; } .strelka-p { right: 0; }
+.vitrina-podpis { display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 22px; text-align: left; opacity: 0; animation: vverh .8s 1.1s var(--plavno) forwards; transform: translateY(12px); }
+.vitrina-podpis > div { overflow: hidden; min-width: 160px; }
+.vitrina-podpis b { font: 400 22px/1.2 var(--z); }
+.vitrina-podpis span { color: var(--zoloto-t); font-size: 15px; }
+
+/* ===== Прогулка: девочка с тележкой из логотипа ===== */
+.zemlya { position: absolute; left: 0; right: 0; bottom: 14px; height: 76px; border-bottom: 1px solid var(--zoloto); overflow: hidden; pointer-events: none; }
+.glavnaya-tma .zemlya { border-color: var(--liniya); }
+.progulka { position: absolute; left: 0; bottom: -1px; height: 72px; aspect-ratio: 850 / 519; will-change: transform; transform: translate3d(-110%, 0, 0); }
+.progulka > img { position: absolute; }
+.progulka-telo { inset: 0; width: 100%; height: 100%; }
+.progulka .koleso { width: 7.06%; top: 81.89%; will-change: transform; }
+
+@media (min-width: 900px) {
+  .glavnaya-svet { grid-template-columns: 1.1fr .9fr; align-items: center; min-height: calc(100vh - 72px); padding-top: 40px; padding-bottom: 140px; }
+  .arka-svet { transform: translate3d(0, calc(var(--sy) * .1px), 0); }
+  .zemlya { height: 96px; } .progulka { height: 92px; }
+  .strelka-l { left: 12%; } .strelka-p { right: 12%; }
+}
+
+@keyframes slovo { to { transform: none; } }
+@keyframes smena { from { transform: translateY(100%); opacity: 0; } }
+@keyframes zanaves { to { clip-path: inset(0 0 0 0 round 999px 999px var(--r) var(--r)); } }
+@keyframes svet { from { opacity: 0; } 40% { opacity: .5; } 55% { opacity: .2; } to { opacity: 1; } }
+@keyframes vspyshka { 30% { opacity: 1.6; filter: brightness(1.5); } }
+@keyframes razmytie { 0% { filter: blur(0); } 35% { filter: blur(3px); } 100% { filter: blur(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sloj-tekst, .arka-svet, .vitrina { transform: none; opacity: 1; }
+  .slovo > span { transform: none; }
+  .arka-okno { clip-path: none; }
+}

@@ -1,0 +1,186 @@
+{
+  "tovary": [
+    {
+      "id": "trench",
+      "foto": "img/tovary/trench.webp",
+      "name": "Тренч",
+      "vozrast": "3-10 лет",
+      "ot": 36,
+      "do": 120,
+      "cena": 2600,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "dzhinsovoe-plate",
+      "foto": "img/tovary/dzhinsovoe-plate.webp",
+      "name": "Джинсовое платье",
+      "vozrast": "2-10 лет",
+      "ot": 24,
+      "do": 120,
+      "cena": 2500,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "dublenka",
+      "foto": "img/tovary/dublenka.webp",
+      "name": "Дублёнка",
+      "vozrast": "1,5-8 лет",
+      "ot": 18,
+      "do": 96,
+      "cena": null,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "vyazanyj-komplekt",
+      "foto": "img/tovary/vyazanyj-komplekt.webp",
+      "name": "Вязаный комплект с шапочкой",
+      "vozrast": "0-12 мес",
+      "ot": 0,
+      "do": 12,
+      "cena": null,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "kurtka-sinyaya",
+      "foto": "img/tovary/kurtka-sinyaya.webp",
+      "name": "Куртка для мальчика",
+      "vozrast": "9-13 лет",
+      "ot": 108,
+      "do": 156,
+      "cena": 1800,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "kostyum-haki",
+      "foto": "img/tovary/kostyum-haki.webp",
+      "name": "Рубашка и брюки",
+      "vozrast": "3-7 лет",
+      "ot": 36,
+      "do": 84,
+      "cena": 1800,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "myagkij-komplekt",
+      "foto": "img/tovary/myagkij-komplekt.webp",
+      "name": "Мягкий комбинезон",
+      "vozrast": "3-9 мес",
+      "ot": 3,
+      "do": 9,
+      "cena": null,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "kurtka-kapyushon",
+      "foto": "img/tovary/kurtka-kapyushon.webp",
+      "name": "Куртка с капюшоном",
+      "vozrast": "2-3 и 7-8 лет",
+      "ot": 24,
+      "do": 96,
+      "cena": 1800,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "plate-cvety",
+      "foto": "img/tovary/plate-cvety.webp",
+      "name": "Платье с цветами",
+      "vozrast": "6 мес - 3 года",
+      "ot": 6,
+      "do": 36,
+      "cena": 900,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "dzhinsovye-kurtki",
+      "foto": "img/tovary/dzhinsovye-kurtki.webp",
+      "name": "Джинсовая куртка",
+      "vozrast": "2-7 лет",
+      "ot": 24,
+      "do": 84,
+      "cena": null,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "komplekt-rubchik",
+      "foto": "img/tovary/komplekt-rubchik.webp",
+      "name": "Комплект в рубчик",
+      "vozrast": "0-12 мес",
+      "ot": 0,
+      "do": 12,
+      "cena": null,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "kurtka-osennyaya",
+      "foto": "img/tovary/kurtka-osennyaya.webp",
+      "name": "Осенняя куртка",
+      "vozrast": "2-9 лет",
+      "ot": 24,
+      "do": 108,
+      "cena": null,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "sviter",
+      "foto": "img/tovary/sviter.webp",
+      "name": "Вязаный свитер",
+      "vozrast": "4 мес - 6 лет",
+      "ot": 4,
+      "do": 72,
+      "cena": null,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
+      "id": "kombinezon-vyazanyj",
+      "foto": "img/tovary/kombinezon-vyazanyj.webp",
+      "name": "Комбинезон и шапочка",
+      "vozrast": "3-9 мес",
+      "ot": 3,
+      "do": 9,
+      "cena": null,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    }
+  ],
+  "arka": [
+    "trench",
+    "vyazanyj-komplekt",
+    "dzhinsovoe-plate",
+    "kurtka-kapyushon"
+  ],
+  "vitrina": [
+    "trench",
+    "dzhinsovoe-plate",
+    "dublenka",
+    "kurtka-kapyushon",
+    "vyazanyj-komplekt",
+    "kostyum-haki"
+  ]
+}

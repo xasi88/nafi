@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#17120e" media="(prefers-color-scheme: dark)">
+<title>NAFI: детская одежда в Грозном</title>
+<meta name="description" content="Детская одежда NAFI от 0 до 14 лет в Грозном. Выберите вещь по возрасту и закажите в WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Prata&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/glavnaya.css">
+<link rel="stylesheet" href="css/katalog.css">
+<script>
+  // Тема как на телефоне. ?tema=svet или ?tema=tma: для проверки
+  (() => {
+    const d = document.documentElement, m = matchMedia('(prefers-color-scheme: dark)'), q = new URLSearchParams(location.search).get('tema');
+    const tema = () => { d.dataset.tema = q === 'tma' || q === 'svet' ? q : (m.matches ? 'tma' : 'svet'); };
+    tema(); m.addEventListener('change', tema); d.classList.add('js');
+  })();
+</script>
+</head>
+<body>
+<header class="shapka">
+  <nav class="shapka-menu" aria-label="Разделы"><a href="#katalog">Каталог</a><a href="#o-nas">О магазине</a></nav>
+  <a class="shapka-znak" href="#" aria-label="NAFI with love, наверх"><img src="img/znak.png" alt="NAFI with love" width="484" height="375"></a>
+  <a class="shapka-wa" data-wa target="_blank" rel="noopener">Написать в WhatsApp</a>
+</header>
+
+<main>
+  <!-- Светлая тема телефона: арка -->
+  <section class="glavnaya glavnaya-svet">
+    <div class="glavnaya-tekst sloj-tekst">
+      <h1 data-slova>Одежда для детей от рождения до 14&nbsp;лет</h1>
+      <p class="podzag">Магазин NAFI в Грозном. Подберём вещь по возрасту и привезём на примерку по Чечне.</p>
+      <div class="glavnaya-knopki">
+        <a class="knopka" href="#katalog">Смотреть каталог</a>
+        <a class="ssylka" data-wa target="_blank" rel="noopener">Заказать в WhatsApp</a>
+      </div>
+    </div>
+    <figure class="arka-svet sloj-arka" data-arka>
+      <div class="arka-okno"></div>
+      <figcaption class="arka-podpis" aria-live="polite"><b class="smena" data-arka-name></b><span class="smena" data-arka-info></span></figcaption>
+    </figure>
+    <div class="zemlya" data-progulka aria-hidden="true"></div>
+  </section>
+
+  <!-- Тёмная тема телефона: витрина -->
+  <section class="glavnaya glavnaya-tma">
+    <div class="scena-tekst sloj-tekst">
+      <h1 data-slova>Детская одежда от&nbsp;0 до&nbsp;14&nbsp;лет</h1>
+      <p class="podzag">Магазин NAFI в Грозном. Примерка дома по Чечне, доставка по России.</p>
+    </div>
+    <div class="vitrina sloj-arka" data-vitrina>
+      <div class="svet" aria-hidden="true"></div>
+      <div class="vitrina-lenta" data-lenta></div>
+      <button class="strelka strelka-l" type="button" data-shag="-1" aria-label="Предыдущая вещь"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="strelka strelka-p" type="button" data-shag="1" aria-label="Следующая вещь"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+    <div class="vitrina-podpis" aria-live="polite">
+      <div><b class="smena" data-v-name></b><span class="smena" data-v-info></span></div>
+      <a class="knopka" data-v-wa target="_blank" rel="noopener">Заказать</a>
+    </div>
+    <div class="zemlya" data-progulka aria-hidden="true"></div>
+  </section>
+
+  <section class="katalog" id="katalog">
+    <div class="katalog-verh"><h2>Каталог</h2><span class="schet" data-schet></span></div>
+    <div class="vozrasty" id="vozrast" data-vozrasty role="group" aria-label="Возраст ребёнка"></div>
+    <div class="setka" data-setka></div>
+  </section>
+
+  <section class="o-nas" id="o-nas">
+    <svg class="vetka" viewBox="0 0 120 32" aria-hidden="true"><path pathLength="1" d="M4 22c30-2 70-6 112-18M24 20c-2-6 2-10 6-12M24 20c4-2 9-2 12 1M48 17c-1-6 3-10 7-11M48 17c4-1 9 0 12 3M72 13c0-6 4-9 8-10M72 13c4 0 8 2 10 5"/></svg>
+    <p class="poyav">NAFI в переводе с арабского значит «приносящий пользу». Магазин детской одежды, обуви и аксессуаров в Грозном.</p>
+    <ul class="fakty">
+      <li class="poyav"><b>Примерка дома</b>Привезём вещи по Чечне. Оставьте то, что подошло.</li>
+      <li class="poyav"><b>Доставка по России</b>Отправим заказ в любой город бесплатно.</li>
+      <li class="poyav"><b>Заказ в два касания</b>Нажмите на вещь: сообщение с названием и возрастом уже готово.</li>
+    </ul>
+  </section>
+</main>
+
+<footer class="podval">
+  <img src="img/znak.png" alt="NAFI with love" width="484" height="375" loading="lazy">
+  <p>Детская одежда от 0 до 14 лет, Грозный</p>
+  <p><a data-wa target="_blank" rel="noopener">WhatsApp</a> · <a href="https://www.instagram.com/nafi_with_love/" target="_blank" rel="noopener">Instagram</a></p>
+</footer>
+
+<nav class="niz" aria-label="Быстрые кнопки">
+  <a href="#katalog"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>Каталог</a>
+  <a href="#vozrast"><svg viewBox="0 0 24 24"><path d="M12 3v18M7 7h10M8 12h8M9 17h6"/></svg>Возраст</a>
+  <a href="https://www.instagram.com/nafi_with_love/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/></svg>Instagram</a>
+  <a class="niz-wa" data-wa target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M5 19l1.2-3.6A7.5 7.5 0 1 1 9 18.4z"/></svg>WhatsApp</a>
+</nav>
+
+<script type="module" src="js/dvizhenie.js"></script>
+</body>
+</html>
