@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/glavnaya.css">
 <link rel="stylesheet" href="css/katalog.css">
+<link rel="stylesheet" href="css/korzina.css">
 <script>
   // Тема как на телефоне. ?tema=svet или ?tema=tma: для проверки
   (() => {
@@ -32,6 +33,7 @@
   <a class="shapka-znak" href="#" aria-label="NAFI with love, наверх"><img src="img/znak.png" alt="NAFI with love" width="484" height="375"></a>
   <div class="shapka-pravo">
     <a class="shapka-admin" href="admin.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l9 9-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg>Мои цены</a>
+    <button class="shapka-korzina" type="button" data-korzina-otkryt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>Корзина<span class="chislo" data-chislo hidden></span></button>
     <a class="shapka-wa" data-wa target="_blank" rel="noopener">Написать в WhatsApp</a>
   </div>
 </header>
@@ -68,7 +70,7 @@
     </div>
     <div class="vitrina-podpis" aria-live="polite">
       <div><b class="smena" data-v-name></b><span class="smena" data-v-info></span></div>
-      <a class="knopka" data-v-wa target="_blank" rel="noopener">Заказать</a>
+      <button class="knopka" type="button" data-v-korzinu><span class="nado">В корзину</span><span class="uzhe">В корзине</span><span class="vybrat">Выбрать размер</span></button>
     </div>
     <div class="zemlya" data-progulka aria-hidden="true"></div>
   </section>
@@ -85,7 +87,7 @@
     <ul class="fakty">
       <li class="poyav"><b>Примерка дома</b>Привезём вещи по Чечне. Оставьте то, что подошло.</li>
       <li class="poyav"><b>Доставка по России</b>Отправим заказ в любой город бесплатно.</li>
-      <li class="poyav"><b>Заказ в два касания</b>Нажмите на вещь: сообщение с названием и возрастом уже готово.</li>
+      <li class="poyav"><b>Заказ в WhatsApp</b>Соберите вещи в корзину. Сообщение с названиями, возрастом и ценой уже готово.</li>
     </ul>
   </section>
 </main>
@@ -99,11 +101,27 @@
 <nav class="niz" aria-label="Быстрые кнопки">
   <a href="#katalog"><svg viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg>Каталог</a>
   <a href="#vozrast"><svg viewBox="0 0 24 24"><rect x="2" y="6.5" width="20" height="11" rx="2"/><path d="M6.5 6.5v4M10.5 6.5v6M14.5 6.5v4M18.5 6.5v3"/></svg>Возраст</a>
-  <a href="https://www.instagram.com/nafi_with_love/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/></svg>Instagram</a>
+  <button class="niz-korzina" type="button" data-korzina-otkryt><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>Корзина<span class="chislo" data-chislo hidden></span></button>
   <a class="niz-wa" data-wa target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M5 19l1.2-3.6A7.5 7.5 0 1 1 9 18.4z"/></svg>WhatsApp</a>
   <a class="niz-admin" href="admin.html"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l9 9-8 8z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg>Цены</a>
 </nav>
 
+<dialog class="korzina" data-korzina aria-labelledby="korzina-zag">
+  <div class="korzina-ten"></div>
+  <div class="korzina-panel">
+    <div class="korzina-verh"><h2 id="korzina-zag">Корзина</h2><span class="schet" data-k-schet></span><button class="korzina-zakryt" type="button" data-k-zakryt>Закрыть</button></div>
+    <div class="korzina-pusto" data-k-pusto><p>В корзине пока пусто.</p>Нажмите на вещь в каталоге, и она ляжет сюда.<a class="knopka" href="#katalog" data-k-katalog>Смотреть каталог</a></div>
+    <ul class="korzina-spisok" data-k-spisok></ul>
+    <div class="korzina-niz" data-k-niz hidden>
+      <p class="korzina-itog"><span>Итого</span><b data-k-itog></b></p>
+      <p class="korzina-primech" data-k-primech></p>
+      <a class="knopka" data-k-zakaz target="_blank" rel="noopener">Оформить в WhatsApp</a>
+      <button class="korzina-ochistit" type="button" data-k-ochistit>Очистить корзину</button>
+    </div>
+  </div>
+</dialog>
+
+<script type="module" src="js/korzina.js"></script>
 <script type="module" src="js/dvizhenie.js"></script>
 </body>
 </html>

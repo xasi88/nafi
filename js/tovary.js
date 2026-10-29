@@ -1,7 +1,6 @@
-// NAFI: карточки вещей, фильтр по возрасту, выбор размера, заказ в WhatsApp. Вещи берутся из data/tovary.json (js/dannye.js).
-import { zagruzit, rub, cenaSeychas, cenaText, razmery } from './dannye.js';
+// NAFI: карточки вещей, фильтр по возрасту, выбор размера, кнопки «В корзину» (js/korzina.js). Вещи берутся из data/tovary.json (js/dannye.js).
+import { zagruzit, rub, cenaSeychas, cenaText, waUrl, veshchej, razmery } from './dannye.js';
 
-const WA = '79280080809';
 let TOVARY = [];
 
 const VOZRASTY = [
@@ -15,25 +14,14 @@ const VOZRASTY = [
 export const tovar = (id) => TOVARY.find((t) => t.id === id);
 export { cenaText };
 
-// Размер выбран: он идёт в сообщение вместо вопроса о размерах
-export function waLink(t, razmer) {
-  const c = t && cenaSeychas(t);
-  const msg = t
-    ? `Здравствуйте! Хочу заказать: ${t.name}, ${razmer ? `размер ${razmer}` : t.vozrast}${c ? ', ' + rub(c) : ''}.${razmer ? '' : ' Какие размеры есть?'}`
-    : 'Здравствуйте! Хочу подобрать одежду в NAFI.';
-  return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
-}
+// Общая ссылка WhatsApp: шапка, первый экран, подвал. Заказ вещей идёт через корзину.
+export const waLink = () => waUrl('Здравствуйте! Хочу подобрать одежду в NAFI.');
 
-function veshchej(n) {
-  const d = n % 10, s = n % 100;
-  if (d === 1 && s !== 11) return `${n} вещь`;
-  if (d >= 2 && d <= 4 && (s < 12 || s > 14)) return `${n} вещи`;
-  return `${n} вещей`;
-}
+// Сумка: положить в корзину. Галочка: вещь уже в корзине. Кнопка показывает одно из двух.
+const SUMKA = '<svg class="ikon-sumka" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>';
+const GALOCHKA = '<svg class="ikon-galochka" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 
-const WA_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.2-.2-.5-.3Z"/></svg>';
-
-function cenaHtml(t) {
+export function cenaHtml(t) {
   if (t.prodano) return 'Продано';
   const c = cenaSeychas(t);
   if (!c) return 'Цена в WhatsApp';
@@ -46,16 +34,16 @@ function kartochka(t) {
     t.prodano && '<span class="metka metka-prodano">Продано</span>'].filter(Boolean).join('');
   const foto = `<img src="${t.foto}" alt="${t.name}, ${t.vozrast}" loading="lazy" width="640" height="800">`;
   return `<article class="tovar${t.prodano ? ' prodano' : ''}" data-id="${t.id}">
-    ${t.prodano ? `<div class="tovar-foto">${foto}` : `<a class="tovar-foto" href="${waLink(t)}" target="_blank" rel="noopener">${foto}`}
+    ${t.prodano ? `<div class="tovar-foto">${foto}` : `<button class="tovar-foto" type="button" data-v-korzinu="${t.id}" aria-label="В корзину: ${t.name}">${foto}`}
       ${metki ? `<div class="metki">${metki}</div>` : ''}
-    ${t.prodano ? '</div>' : '</a>'}
+    ${t.prodano ? '</div>' : '</button>'}
     <div class="tovar-tekst">
       <h3>${t.name}</h3>
       <p class="tovar-vozrast">${t.vozrast}</p>
       ${!t.prodano && razmery(t).length ? `<div class="tovar-razmery" role="group" aria-label="Размер, рост в см">${razmery(t).map((r) => `<button type="button" aria-pressed="false" data-razmer="${r}">${r}</button>`).join('')}</div>` : ''}
       <p class="tovar-cena">${cenaHtml(t)}</p>
     </div>
-    ${t.prodano ? '' : `<a class="tovar-wa" href="${waLink(t)}" target="_blank" rel="noopener" aria-label="Заказать в WhatsApp: ${t.name}">${WA_ICON}</a>`}
+    ${t.prodano ? '' : `<button class="tovar-v" type="button" data-v-korzinu="${t.id}" aria-pressed="false" aria-label="В корзину: ${t.name}">${SUMKA}${GALOCHKA}</button>`}
   </article>`;
 }
 
@@ -105,7 +93,7 @@ export const gotovo = zagruzit().then((d) => {
   setka.querySelectorAll('.tovar').forEach((k, i) => k.style.setProperty('--i', i % 4));
   document.querySelector('[data-schet]').textContent = veshchej(TOVARY.filter((t) => !t.prodano).length);
   const est = (id) => tovar(id) && !tovar(id).prodano;
-  return { arka: d.arka.filter(est).map(tovar), vitrina: d.vitrina.filter(est).map(tovar) };
+  return { tovary: TOVARY, arka: d.arka.filter(est).map(tovar), vitrina: d.vitrina.filter(est).map(tovar) };
 });
 
 const ryad = document.querySelector('[data-vozrasty]');
@@ -116,11 +104,10 @@ ryad.addEventListener('click', (e) => {
 });
 document.querySelectorAll('[data-wa]').forEach((a) => { a.href = waLink(); });
 
-// Размер в карточке: один на выбор, второе нажатие снимает. Обе ссылки заказа берут выбранный размер.
+// Размер в карточке: один на выбор, второе нажатие снимает. Выбранный размер кладёт в корзину js/korzina.js.
 document.querySelector('[data-setka]').addEventListener('click', (e) => {
   const b = e.target.closest('[data-razmer]');
   if (!b) return;
-  const k = b.closest('.tovar'), t = tovar(k.dataset.id), vybran = b.getAttribute('aria-pressed') !== 'true';
-  k.querySelectorAll('[data-razmer]').forEach((x) => x.setAttribute('aria-pressed', x === b && vybran));
-  k.querySelectorAll('.tovar-foto[href], .tovar-wa').forEach((a) => { a.href = waLink(t, vybran ? b.dataset.razmer : null); });
+  const vybran = b.getAttribute('aria-pressed') !== 'true';
+  b.closest('.tovar').querySelectorAll('[data-razmer]').forEach((x) => x.setAttribute('aria-pressed', x === b && vybran));
 });

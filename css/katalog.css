@@ -31,20 +31,29 @@
 .tovar h3 { font: 500 15px/1.3 var(--s); }
 .tovar-vozrast { color: var(--seryj); font-size: 14px; }
 .tovar-cena { margin-top: 4px; font: 400 17px var(--z); color: var(--zoloto-t); }
+button.tovar-foto { width: 100%; padding: 0; border: 0; cursor: pointer; }
+/* Кнопка «В корзину»: сумка; вещь в корзине: круг наливается золотом, галочка рисуется */
+.tovar-v { position: absolute; right: 0; bottom: 0; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border-radius: 50%; border: 1px solid var(--zoloto); background: none; color: var(--zoloto-t); cursor: pointer; transition: background .3s, color .3s, transform .35s var(--pruzhina); }
+.tovar-v:hover { background: var(--zoloto); color: var(--na-zolote); transform: scale(1.08); }
+.tovar-v:active { transform: scale(.9); }
+.tovar-v svg { grid-area: 1 / 1; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: opacity .3s, transform .4s var(--pruzhina); }
+.tovar-v .ikon-galochka { opacity: 0; }
+.ikon-galochka path { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .45s .12s var(--plavno); }
+.tovar-v[aria-pressed="true"] { background: var(--zoloto); color: var(--na-zolote); }
+.tovar-v[aria-pressed="true"] .ikon-sumka { opacity: 0; transform: scale(.5); }
+.tovar-v[aria-pressed="true"] .ikon-galochka { opacity: 1; }
+.tovar-v[aria-pressed="true"] .ikon-galochka path { stroke-dashoffset: 0; }
 /* Размер в карточке: кнопки как у возраста, только меньше. Ряд листается пальцем до правого края карточки. */
 .tovar-razmery { display: flex; align-items: center; gap: 6px; margin: 8px -52px 0 0; overflow-x: auto; scrollbar-width: none; }
 .tovar-razmery::-webkit-scrollbar { display: none; }
 .tovar-razmery button { min-width: 44px; min-height: 44px; padding: 0 8px; font-size: 14px; }
 /* Цена под размерами на высоте кнопки WhatsApp: кнопка не налезает на ряд размеров */
 .tovar-razmery + .tovar-cena { min-height: 44px; margin-top: 0; padding-top: 10px; }
-.tovar-wa { position: absolute; right: 0; bottom: 0; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--zoloto); color: var(--zoloto-t); transition: background .3s, color .3s, transform .35s var(--pruzhina); }
-.tovar-wa:hover { background: var(--zoloto); color: var(--fon); transform: scale(1.08); }
-.tovar-wa svg { width: 20px; height: 20px; }
 
 /* Метки на фото: хит, скидка, продано. Проданная вещь бледнее и без кнопки заказа. */
 .metki { position: absolute; left: 10px; top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
 .metka { padding: 5px 10px; border-radius: 4px; background: var(--fon); color: var(--tekst); font: 600 12px/1.2 var(--s); box-shadow: 0 4px 14px rgba(0, 0, 0, .12); }
-.metka-skidka { background: var(--zoloto); color: #1b1510; }
+.metka-skidka { background: var(--zoloto); color: var(--na-zolote); }
 .metka-prodano { background: var(--tekst); color: var(--fon); }
 .tovar-cena s { margin-left: 6px; color: var(--seryj); font: 400 14px var(--s); }
 .tovar.prodano .tovar-foto img { filter: grayscale(.85) opacity(.55); }

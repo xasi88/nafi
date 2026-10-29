@@ -1,0 +1,89 @@
+/* Корзина: значок с числом в шапке и нижнем меню, панель снизу (телефон) или справа (Surface), полёт фото в значок.
+   Движение: docs/Раскадровка движения.md, «Корзина». */
+.shapka-korzina { display: none; position: relative; min-height: 44px; align-items: center; gap: 8px; padding: 0 16px; border: 1px solid var(--liniya); border-radius: 4px; background: none; cursor: pointer; font-weight: 500; transition: border-color .3s; }
+.shapka-korzina:hover { border-color: var(--zoloto); }
+.shapka-korzina svg { width: 20px; height: 20px; fill: none; stroke: var(--zoloto-t); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.niz-korzina { position: relative; }
+
+/* Число вещей: золотой кружок, подпрыгивает, когда фото долетело */
+.chislo { position: absolute; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--zoloto); color: var(--na-zolote); font: 600 12px/20px var(--s); text-align: center; }
+.chislo[hidden] { display: none; }
+.shapka-korzina .chislo { top: -9px; right: -9px; }
+.niz-korzina .chislo { top: 2px; left: calc(50% + 4px); }
+.chislo.podskok { animation: podskok .6s var(--pruzhina); }
+@keyframes podskok { 35% { transform: scale(1.5); } }
+
+/* Фото летит дугой в значок (js/korzina.js) */
+.let { position: fixed; z-index: 60; margin: 0; object-fit: cover; border-radius: var(--r); box-shadow: var(--ten); pointer-events: none; }
+
+/* Кнопка витрины: «В корзину» или «В корзине» */
+button.knopka { border: 0; cursor: pointer; }
+.knopka .uzhe, .knopka .vybrat, .knopka.v-korzine .nado { display: none; }
+.knopka.v-korzine .uzhe { display: inline; }
+/* У вещи есть размеры: витрина ведёт к карточке, размер выбирают там */
+.knopka.s-razmerom .nado, .knopka.s-razmerom .uzhe { display: none; }
+.knopka.s-razmerom .vybrat { display: inline; }
+.knopka .nado, .knopka .uzhe, .knopka .vybrat { color: inherit; white-space: nowrap; }
+
+/* Размер не выбран: ряд вздрагивает, на месте возраста золотом «Выберите размер» (одна строка, карточка не прыгает) */
+.tovar.vyberi .tovar-razmery { animation: vzdrog .5s var(--plavno); }
+.tovar.vyberi .tovar-razmery button { border-color: var(--zoloto); }
+.tovar.vyberi .tovar-vozrast { font-size: 0; }
+.tovar.vyberi .tovar-vozrast::after { content: 'Выберите размер'; font-size: 14px; font-weight: 500; color: var(--zoloto-t); }
+@keyframes vzdrog { 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+.vitrina-podpis .knopka { flex: none; }
+
+/* Панель. Окно на весь экран, внутри тень и сама панель: так обе темы берут цвет из переменных */
+/* Страница стоит, пока корзина открыта. Запрет на body, не на html: иначе липкая шапка теряет место */
+.korzina-otkryta body { overflow: hidden; }
+.korzina { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: none; color: var(--tekst); overflow: hidden; }
+.korzina::backdrop { background: transparent; }
+.korzina [hidden] { display: none; }
+.korzina-ten { position: absolute; inset: 0; background: var(--zatemnenie); opacity: 0; transition: opacity .45s var(--plavno); }
+.korzina-panel { position: absolute; left: 0; right: 0; bottom: 0; max-height: 88dvh; display: flex; flex-direction: column; padding-bottom: env(safe-area-inset-bottom); background: var(--fon); border-radius: var(--r) var(--r) 0 0; box-shadow: var(--ten); transform: translateY(100%); transition: transform .5s var(--plavno); }
+.korzina.otkryta .korzina-ten { opacity: 1; }
+.korzina.otkryta .korzina-panel { transform: none; }
+
+.korzina-verh { display: flex; align-items: baseline; gap: 12px; padding: 14px 16px 10px; border-bottom: 1px solid var(--liniya); }
+.korzina-verh h2 { font: 400 28px/1.1 var(--z); }
+.korzina-zakryt { margin-left: auto; min-height: 44px; padding: 0 2px; border: 0; background: none; color: var(--seryj); font-weight: 500; cursor: pointer; }
+.korzina-zakryt:hover { color: var(--tekst); }
+
+/* Строки встают по очереди. Убранная уходит влево (js/korzina.js) */
+.korzina-spisok { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; list-style: none; padding: 0 16px; }
+.korzina-spisok li { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--liniya); overflow: hidden;
+  opacity: 0; transform: translateY(14px); transition: opacity .5s var(--plavno), transform .5s var(--plavno); transition-delay: calc(var(--i) * 60ms + 140ms); }
+.korzina.otkryta .korzina-spisok li { opacity: 1; transform: none; }
+.korzina-spisok img { width: 64px; height: 80px; object-fit: cover; border-radius: 10px; background: var(--fon-2); }
+.korzina-spisok b { display: block; font-weight: 500; font-size: 15px; line-height: 1.3; }
+.korzina-spisok span { display: block; }
+.k-vozrast { color: var(--seryj); font-size: 14px; }
+.k-cena { margin-top: 2px; font: 400 16px var(--z); color: var(--zoloto-t); }
+.k-cena s { margin-left: 6px; color: var(--seryj); font: 400 13px var(--s); }
+.korzina-spisok .prodano img { filter: grayscale(.85) opacity(.55); }
+.korzina-spisok .prodano .k-cena { color: var(--seryj); font: 500 14px var(--s); }
+.korzina-ubrat { min-height: 44px; padding: 0 2px; border: 0; background: linear-gradient(var(--liniya), var(--liniya)) 0 72% / 100% 1px no-repeat; color: var(--seryj); font-size: 14px; cursor: pointer; transition: color .3s; }
+.korzina-ubrat:hover { color: var(--tekst); }
+
+.korzina-pusto { display: grid; justify-items: start; gap: 18px; padding: 32px 16px 40px; color: var(--seryj); }
+.korzina-pusto p { font: 400 22px/1.35 var(--z); color: var(--tekst); }
+.korzina-niz { display: grid; gap: 8px; padding: 14px 16px 16px; border-top: 1px solid var(--liniya); background: var(--fon-2); }
+.korzina-itog { display: flex; justify-content: space-between; align-items: baseline; }
+.korzina-itog b { font: 400 26px var(--z); color: var(--zoloto-t); }
+.korzina-primech { color: var(--seryj); font-size: 14px; }
+.korzina-niz .knopka { width: 100%; margin-top: 4px; }
+.korzina-ochistit { justify-self: center; min-height: 44px; padding: 0 2px; border: 0; background: none; color: var(--seryj); font-size: 14px; cursor: pointer; }
+.korzina-ochistit:hover { color: var(--tekst); }
+
+@media (min-width: 900px) {
+  .shapka-korzina { display: inline-flex; }
+  .korzina-panel { top: 0; left: auto; width: 440px; max-height: none; border-radius: 0; transform: translateX(100%); }
+  .korzina-verh { padding: 22px 28px 14px; }
+  .korzina-spisok { padding: 0 28px; }
+  .korzina-niz { padding: 18px 28px 24px; }
+  .korzina-pusto { padding-inline: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .korzina-panel, .korzina.otkryta .korzina-panel, .korzina-spisok li { transform: none; }
+}

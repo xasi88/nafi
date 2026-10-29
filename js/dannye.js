@@ -27,6 +27,17 @@ export async function zagruzit(put = PUT) {
 // Неразрывный пробел: «₽» не уходит на новую строку без числа
 export const rub = (n) => n.toLocaleString('ru-RU') + '\u00a0₽';
 
+// WhatsApp магазина (шапка Instagram NAFI). Любой заказ уходит сюда готовым сообщением.
+export const WA = '79280080809';
+export const waUrl = (msg) => `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+
+export function veshchej(n) {
+  const d = n % 10, s = n % 100;
+  if (d === 1 && s !== 11) return `${n} вещь`;
+  if (d >= 2 && d <= 4 && (s < 12 || s > 14)) return `${n} вещи`;
+  return `${n} вещей`;
+}
+
 // Цена со скидкой, вниз до десятка рублей
 export function cenaSeychas(t) {
   if (!t.cena) return null;
@@ -60,4 +71,31 @@ export function oshibka(p) {
   if ('prodano' in p && typeof p.prodano !== 'boolean') return 'Продано: да или нет';
   if ('razmery' in p && !(Array.isArray(p.razmery) && p.razmery.every((r) => RAZMERY.some(([x]) => x === r)))) return 'Размеры: выберите из списка';
   return '';
+}
+
+// Корзина: в телефоне покупателя лежат только id вещи и выбранный размер (r, рост в см или null).
+// Цена, «Продано» и размеры в наличии всегда из свежего файла, поэтому правки Миланы сразу видны в корзине.
+// Вещи, которой больше нет в файле, нет и в корзине. Проданная вещь и размер, которого больше нет, идут в net.
+export function sostav(zapisi, tovary) {
+  const vse = zapisi.map(({ id, r }) => ({ t: tovary.find((x) => x.id === id), r: r || null })).filter((z) => z.t);
+  const nelzya = (z) => z.t.prodano || (z.r && !razmery(z.t).includes(z.r));
+  return { est: vse.filter((z) => !nelzya(z)), net: vse.filter(nelzya) };
+}
+
+// Сумма вещей с ценой и сколько вещей без цены
+export function itogo(est) {
+  const ceny = est.map((z) => cenaSeychas(z.t));
+  return { summa: ceny.reduce((s, c) => s + (c || 0), 0), bezCeny: ceny.filter((c) => !c).length };
+}
+
+// Заказ в WhatsApp: каждая вещь с размером (или возрастом) и ценой, итог. Есть вещь без размера: вопрос о размерах.
+export function soobshchenie(est) {
+  const stroki = est.map(({ t, r }, i) => {
+    const c = cenaSeychas(t);
+    return `${i + 1}. ${t.name}, ${r ? `размер ${r}` : t.vozrast}, ${c ? rub(c) + (t.skidka ? ` (скидка ${t.skidka}%)` : '') : 'цена в WhatsApp'}`;
+  });
+  const { summa, bezCeny } = itogo(est);
+  const itog = summa ? [`Итого: ${rub(summa)}${bezCeny ? `, ещё ${veshchej(bezCeny)} без цены` : ''}`] : [];
+  const vopros = est.some((z) => !z.r) ? ['Какие размеры есть?'] : [];
+  return ['Здравствуйте! Хочу заказать в NAFI:', ...stroki, ...itog, ...vopros].join(String.fromCharCode(10));
 }

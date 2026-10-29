@@ -1,5 +1,6 @@
 // NAFI: движение по раскадровке (docs/Раскадровка движения.md). При «уменьшить движение» всё стоит.
-import { gotovo, waLink, cenaText } from './tovary.js';
+import { gotovo, cenaText } from './tovary.js';
+import { knopka } from './korzina.js';
 
 const TIHO = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -51,7 +52,7 @@ function vitrina(spisok) {
   lenta.innerHTML = spisok.map((t) => `<div class="arka"><img src="${t.foto}" alt="${t.name}" width="640" height="800"></div>`).join('');
   const arki = [...lenta.children];
   const svet = document.querySelector('.svet');
-  const imya = document.querySelector('[data-v-name]'), info = document.querySelector('[data-v-info]'), wa = document.querySelector('[data-v-wa]');
+  const imya = document.querySelector('[data-v-name]'), info = document.querySelector('[data-v-info]'), vKnopka = document.querySelector('.vitrina-podpis [data-v-korzinu]');
   let tek = 0, tajmer;
   const pereklyuchit = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
   const pokaz = (n, sDvizh) => {
@@ -68,7 +69,8 @@ function vitrina(spisok) {
     const t = spisok[tek];
     zamenit(imya, t.name);
     zamenit(info, `${t.vozrast}, ${cenaText(t)}`);
-    wa.href = waLink(t);
+    vKnopka.dataset.vKorzinu = t.id;
+    knopka(vKnopka);
     if (sDvizh && !TIHO) { pereklyuchit(lenta, 'dvizh'); pereklyuchit(svet, 'vspyshka'); }
   };
   const avto = () => {

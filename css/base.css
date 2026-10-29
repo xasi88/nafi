@@ -10,6 +10,8 @@
   --liniya: #e9e0d2;
   --knopka-fon: #2a221c;
   --knopka-tekst: #ffffff;
+  --na-zolote: #1b1510;
+  --zatemnenie: rgba(42, 34, 28, .45);
   --ten: 0 18px 40px -18px rgba(42, 34, 28, .35);
   --r: 18px;
   --z: 'Prata', Georgia, serif;
@@ -29,6 +31,8 @@
     --liniya: rgba(201, 168, 108, .28);
     --knopka-fon: #c9a86c;
     --knopka-tekst: #17120e;
+    --na-zolote: #17120e;
+    --zatemnenie: rgba(0, 0, 0, .62);
     --ten: 0 40px 80px -30px rgba(0, 0, 0, .85);
 }
 
@@ -80,8 +84,9 @@ button { font: inherit; color: inherit; }
 .podval img { width: 96px; height: auto; }
 .podval a { display: inline-block; min-height: 44px; line-height: 44px; border-bottom: 1px solid var(--liniya); }
 .niz { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: grid; grid-template-columns: repeat(4, 1fr); padding: 6px 6px calc(6px + env(safe-area-inset-bottom)); background: var(--fon-2); border-top: 1px solid var(--liniya); animation: vyezd .9s 1s var(--pruzhina) both; }
-.niz a { min-height: 52px; display: grid; justify-items: center; align-content: center; gap: 2px; font-size: 12px; color: var(--seryj); transition: transform .3s var(--pruzhina); }
-.niz a:active { transform: scale(.92); }
+.niz a, .niz button { min-height: 52px; display: grid; justify-items: center; align-content: center; gap: 2px; font-size: 12px; color: var(--seryj); transition: transform .3s var(--pruzhina); }
+.niz a:active, .niz button:active { transform: scale(.92); }
+.niz button { padding: 0; border: 0; background: none; font-size: 12px; cursor: pointer; }
 .niz svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
 .niz-wa { color: var(--zoloto-t) !important; }
 
