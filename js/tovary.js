@@ -1,5 +1,5 @@
 // NAFI: карточки вещей, фильтр по возрасту, выбор размера, кнопки «В корзину» (js/korzina.js). Вещи берутся из data/tovary.json (js/dannye.js).
-import { zagruzit, rub, cenaSeychas, cenaText, waUrl, veshchej, razmery } from './dannye.js';
+import { zagruzit, rub, cenaSeychas, cenaText, waUrl, veshchej, razmery } from './dannye.js?v=e9d92d71';
 
 let TOVARY = [];
 

@@ -1,7 +1,7 @@
 // NAFI: корзина покупателя. В телефоне лежат только id вещи и размер (localStorage), цены и «Продано» всегда из свежего файла.
 // Заказ уходит в WhatsApp магазина одним сообщением (js/dannye.js). Движение: docs/Раскадровка движения.md, «Корзина».
-import { gotovo, tovar, cenaHtml } from './tovary.js';
-import { sostav, itogo, soobshchenie, waUrl, veshchej, rub, razmery } from './dannye.js';
+import { gotovo, tovar, cenaHtml } from './tovary.js?v=e9d92d71';
+import { sostav, itogo, soobshchenie, waUrl, veshchej, rub, razmery } from './dannye.js?v=e9d92d71';
 
 const KLYUCH = 'nafi-korzina';
 const TIHO = matchMedia('(prefers-reduced-motion: reduce)').matches;

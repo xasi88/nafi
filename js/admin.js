@@ -1,7 +1,7 @@
 // Страница Миланы: цена, скидка, «Хит продаж», «Продано». Сохранение одним коммитом в data/tovary.json.
 // Новые вещи сюда не добавляются: их добавляет Claude через код. Устройство: docs/ARCHITECTURE.md, «Страница Миланы».
-import { PUT, SKIDKI, zagruzit, rub, cenaSeychas, slit, oshibka, razmery, razmeryVozrasta } from './dannye.js';
-import { repo, proverit, prochitat, zapisat } from './github.js';
+import { PUT, SKIDKI, zagruzit, rub, cenaSeychas, slit, oshibka, razmery, razmeryVozrasta } from './dannye.js?v=e9d92d71';
+import { repo, proverit, prochitat, zapisat } from './github.js?v=e9d92d71';
 
 const KLYUCH = 'nafi-klyuch', CHERNOVIK = 'nafi-pravki';
 const hran = {
