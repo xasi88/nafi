@@ -9,8 +9,14 @@
       "do": 84,
       "cena": 1400,
       "skidka": 0,
-      "hit": false,
-      "prodano": false
+      "hit": true,
+      "prodano": false,
+      "razmery": [
+        80,
+        92,
+        98,
+        128
+      ]
     },
     {
       "id": "trench",
