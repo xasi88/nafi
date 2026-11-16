@@ -1,6 +1,18 @@
 {
   "tovary": [
     {
+      "id": "kostyum-trojka",
+      "foto": "img/tovary/kostyum-trojka.jpg",
+      "name": "Костюм тройка",
+      "vozrast": "1-7 лет",
+      "ot": 12,
+      "do": 84,
+      "cena": 1400,
+      "skidka": 0,
+      "hit": false,
+      "prodano": false
+    },
+    {
       "id": "trench",
       "foto": "img/tovary/trench.webp",
       "name": "Тренч",
