@@ -3,10 +3,10 @@
 // - в Telegram (мини-приложение «Мой магазин», js/admin-tg.js): сохраняет бот NAFI, ключа в телефоне нет;
 // - в браузере с ключом GitHub (js/github.js): один коммит в data/tovary.json.
 // Новые вещи и новые фото идут через бота. Устройство: docs/ARCHITECTURE.md, «Страница Миланы».
-import { PUT, SKIDKI, zagruzit, rub, cenaSeychas, slit, oshibka, oshibkaObshchego, razmery, razmeryVozrasta, kategorii, chistyj } from './dannye.js?v=a36433cd';
-import { repo, proverit, prochitat, zapisat } from './github.js?v=a36433cd';
-import { TG, tgStart, tgZakryt, bot, sohranitCherezBota, cherezTelegram } from './admin-tg.js?v=a36433cd';
-import { narisovatObshchee, kategoriiSejchas } from './admin-obshchee.js?v=a36433cd';
+import { PUT, SKIDKI, zagruzit, rub, cenaSeychas, slit, oshibka, oshibkaObshchego, razmery, razmeryVozrasta, kategorii, chistyj } from './dannye.js?v=1be02244';
+import { repo, proverit, prochitat, zapisat } from './github.js?v=1be02244';
+import { TG, tgStart, tgZakryt, bot, sohranitCherezBota, cherezTelegram } from './admin-tg.js?v=1be02244';
+import { narisovatObshchee, kategoriiSejchas } from './admin-obshchee.js?v=1be02244';
 
 const KLYUCH = 'nafi-klyuch', CHERNOVIK = 'nafi-pravki', OTPRAVLENO = 'nafi-otpravleno';
 const hran = {

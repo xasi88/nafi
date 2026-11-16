@@ -1,6 +1,6 @@
 // NAFI: движение по раскадровке (docs/Раскадровка движения.md). При «уменьшить движение» всё стоит.
-import { gotovo, cenaText } from './tovary.js?v=a36433cd';
-import { knopka } from './korzina.js?v=a36433cd';
+import { gotovo, cenaText } from './tovary.js?v=1be02244';
+import { knopka } from './korzina.js?v=1be02244';
 
 const TIHO = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
