@@ -58,3 +58,25 @@
   .adm-vesh { grid-template-columns: 76px minmax(160px, 1fr) 2.4fr; align-items: center; }
   .adm-polya { grid-column: auto; grid-template-columns: repeat(4, 1fr); }
 }
+
+/* Новое (2026-11-16): название, категория, «Скрыть с сайта», новое фото, акция и категории магазина */
+.adm-shiroko { grid-column: 1 / -1; }
+.adm-polya > .knopka-vtor { min-height: 48px; border-radius: 8px; color: var(--tekst); }
+.adm-vesh.skryto { border-style: dashed; }
+.adm-vesh.skryto > img, .adm-vesh.skryto .adm-info h3 { opacity: .5; }
+.adm-magazin { max-width: 1100px; margin: 16px auto 0; padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; border-bottom: 1px solid var(--liniya); }
+.adm-magazin[hidden] { display: none; }
+.adm-magazin h2 { font: 400 22px/1.2 var(--z); margin-top: 6px; }
+.adm-podskazka { color: var(--seryj); font-size: 14px; }
+.adm-kategorii { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.adm-kategorii li, .adm-nov-kat { display: flex; gap: 8px; }
+.adm-kategorii input, .adm-nov-kat input { flex: 1; width: 0; min-width: 0; min-height: 48px; padding: 0 12px; border: 1px solid var(--liniya); border-radius: 8px; background: var(--fon); color: var(--tekst); font: 500 17px var(--s); }
+.adm-kategorii input:focus, .adm-nov-kat input:focus { outline: 2px solid var(--zoloto); outline-offset: 0; border-color: transparent; }
+.adm-kategorii .knopka-vtor, .adm-nov-kat .knopka { min-height: 48px; flex: none; }
+.adm-novaya { display: block; width: calc(100% - 32px); max-width: 1068px; margin: 16px auto 0; }
+.adm-novaya[hidden] { display: none; }
+/* В Telegram: ссылки «На сайт» нет, сайт открывается из бота */
+.adm-telegram .adm-na-sajt { display: none; }
+@media (min-width: 720px) {
+  .adm-shiroko { grid-column: span 2; }
+}

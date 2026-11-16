@@ -1,7 +1,9 @@
-// NAFI: карточки вещей, фильтр по возрасту, выбор размера, кнопки «В корзину» (js/korzina.js). Вещи берутся из data/tovary.json (js/dannye.js).
-import { zagruzit, rub, cenaSeychas, cenaText, waUrl, veshchej, razmery } from './dannye.js?v=e9d92d71';
+// NAFI: карточки вещей, фильтр по возрасту и категории, выбор размера, кнопки «В корзину» (js/korzina.js),
+// баннер акции. Вещи берутся из data/tovary.json (js/dannye.js). Скрытые Миланой вещи сайт не показывает.
+import { zagruzit, rub, cenaSeychas, cenaText, waUrl, veshchej, razmery, naSajte, kategorii, akciya } from './dannye.js?v=14c1559e';
 
 let TOVARY = [];
+const vybor = { vozrast: 'all', kategoriya: 'all' };
 
 const VOZRASTY = [
   { id: 'all', t: 'Все', ot: 0, do: 999 },
@@ -47,13 +49,18 @@ function kartochka(t) {
   </article>`;
 }
 
-// Смена возраста: лишние карточки гаснут, оставшиеся плывут на новые места (FLIP), новые встают
-function vybratVozrast(id) {
-  const v = VOZRASTY.find((x) => x.id === id) || VOZRASTY[0];
-  const podhodit = (t) => t.ot <= v.do && t.do >= v.ot;
+// Вещь подходит выбранному возрасту и категории
+function podhodit(t) {
+  const v = VOZRASTY.find((x) => x.id === vybor.vozrast) || VOZRASTY[0];
+  return t.ot <= v.do && t.do >= v.ot && (vybor.kategoriya === 'all' || t.kategoriya === vybor.kategoriya);
+}
+
+// Смена возраста или категории: лишние карточки гаснут, оставшиеся плывут на новые места (FLIP), новые встают
+function vybrat() {
   const karty = [...document.querySelectorAll('.tovar')];
   const tiho = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.querySelectorAll('[data-vozrast]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.vozrast === v.id));
+  document.querySelectorAll('[data-vozrast]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.vozrast === vybor.vozrast));
+  document.querySelectorAll('[data-kategoriya]').forEach((b) => b.setAttribute('aria-pressed', b.dataset.kategoriya === vybor.kategoriya));
   document.querySelector('[data-schet]').textContent = veshchej(TOVARY.filter((t) => podhodit(t) && !t.prodano).length);
 
   const do_ = new Map(karty.filter((k) => !k.hidden).map((k) => [k, k.getBoundingClientRect()]));
@@ -66,6 +73,7 @@ function vybratVozrast(id) {
       if (!nado) { k.hidden = true; return; }
       if (k.hidden) { k.hidden = false; k.classList.remove('vidno'); k.style.setProperty('--i', 0); }
     });
+    document.querySelector('[data-pusto]').hidden = karty.some((k) => !k.hidden);
     if (tiho) return karty.forEach((k) => k.classList.add('vidno'));
     let n = 0;
     karty.filter((k) => !k.hidden).forEach((k) => {
@@ -85,13 +93,37 @@ function vybratVozrast(id) {
   }, uhodyat.length && !tiho ? 220 : 0);
 }
 
+// Кнопки категорий: только те, где есть вещи на сайте. Меньше двух: ряд не нужен.
+function knopkiKategorij(d) {
+  const ryadK = document.querySelector('[data-kategorii]');
+  const est = kategorii(d).filter((k) => TOVARY.some((t) => t.kategoriya === k.id));
+  ryadK.hidden = est.length < 2;
+  if (ryadK.hidden) return;
+  const knopka = (id) => `<button type="button" data-kategoriya="${id}" aria-pressed="${id === 'all'}"></button>`;
+  ryadK.innerHTML = [knopka('all'), ...est.map((k) => knopka(k.id))].join('');
+  const b = ryadK.querySelectorAll('button');
+  b[0].textContent = 'Всё';
+  est.forEach((k, i) => { b[i + 1].textContent = k.name; });
+}
+
+// Баннер акции: текст пишет Милана, поэтому он ставится как текст, не как разметка
+function banner(d) {
+  const el = document.querySelector('[data-akciya]');
+  const t = akciya(d);
+  el.hidden = !t;
+  el.querySelector('[data-akciya-tekst]').textContent = t;
+}
+
 // Вещи загружены: карточки нарисованы. Проданные стоят в конце.
 export const gotovo = zagruzit().then((d) => {
-  TOVARY = [...d.tovary.filter((t) => !t.prodano), ...d.tovary.filter((t) => t.prodano)];
+  const vidny = d.tovary.filter(naSajte);
+  TOVARY = [...vidny.filter((t) => !t.prodano), ...vidny.filter((t) => t.prodano)];
   const setka = document.querySelector('[data-setka]');
   setka.innerHTML = TOVARY.map(kartochka).join('');
   setka.querySelectorAll('.tovar').forEach((k, i) => k.style.setProperty('--i', i % 4));
   document.querySelector('[data-schet]').textContent = veshchej(TOVARY.filter((t) => !t.prodano).length);
+  knopkiKategorij(d);
+  banner(d);
   const est = (id) => tovar(id) && !tovar(id).prodano;
   return { tovary: TOVARY, arka: d.arka.filter(est).map(tovar), vitrina: d.vitrina.filter(est).map(tovar) };
 });
@@ -100,7 +132,11 @@ const ryad = document.querySelector('[data-vozrasty]');
 ryad.innerHTML = VOZRASTY.map((v) => `<button type="button" data-vozrast="${v.id}" aria-pressed="${v.id === 'all'}">${v.t}</button>`).join('');
 ryad.addEventListener('click', (e) => {
   const b = e.target.closest('[data-vozrast]');
-  if (b && b.getAttribute('aria-pressed') !== 'true') vybratVozrast(b.dataset.vozrast);
+  if (b && b.getAttribute('aria-pressed') !== 'true') { vybor.vozrast = b.dataset.vozrast; vybrat(); }
+});
+document.querySelector('[data-kategorii]').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-kategoriya]');
+  if (b && b.getAttribute('aria-pressed') !== 'true') { vybor.kategoriya = b.dataset.kategoriya; vybrat(); }
 });
 document.querySelectorAll('[data-wa]').forEach((a) => { a.href = waLink(); });
 

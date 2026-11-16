@@ -5,6 +5,19 @@
 .schet { color: var(--seryj); }
 .vozrasty { display: flex; gap: 8px; margin: 20px -16px 28px; padding: 0 16px; overflow-x: auto; scrollbar-width: none; }
 .vozrasty::-webkit-scrollbar { display: none; }
+/* Категории под возрастом: тот же вид кнопок, ряд ближе к возрасту */
+.vozrasty:has(+ .kategorii:not([hidden])) { margin-bottom: 10px; }
+.kategorii[hidden] { display: none; }
+.katalog-pusto { padding: 24px 0; color: var(--seryj); text-align: center; }
+.katalog-pusto[hidden] { display: none; }
+
+/* Акция: полоса вверху сайта, текст Миланы. Блик проходит раз в 6 секунд, без него при «уменьшить движение». */
+.akciya { position: relative; display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 10px 16px; overflow: hidden;
+  background: var(--zoloto); color: var(--na-zolote); font-weight: 600; text-align: center; text-decoration: none; text-wrap: balance; }
+.akciya[hidden] { display: none; }
+.akciya::after { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 35%, rgba(255, 255, 255, .45) 50%, transparent 65%); transform: translateX(-100%); animation: akciya-blik 6s 1.5s ease-in-out infinite; }
+@keyframes akciya-blik { 0%, 70% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .akciya::after { display: none; } }
 .vozrasty button, .tovar-razmery button { position: relative; flex: none; min-height: 48px; padding: 0 20px; border: 1px solid var(--liniya); border-radius: 4px; background: none; cursor: pointer; transition: border-color .3s, color .3s, transform .3s var(--pruzhina); }
 .vozrasty button::before, .tovar-razmery button::before { content: ''; position: absolute; inset: -1px; border-radius: 4px; background: var(--knopka-fon); transform: scaleY(0); transform-origin: bottom; transition: transform .45s var(--plavno); z-index: -1; }
 .vozrasty button, .tovar-razmery button { z-index: 0; isolation: isolate; }

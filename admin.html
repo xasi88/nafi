@@ -4,13 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<link rel="icon" href="img/znak.png">
 <meta name="color-scheme" content="light dark">
-<title>NAFI: вещи и цены</title>
+<title>NAFI: мой магазин</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Prata&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=e9d92d71">
-<link rel="stylesheet" href="css/admin.css?v=e9d92d71">
+<link rel="stylesheet" href="css/base.css?v=14c1559e">
+<link rel="stylesheet" href="css/admin.css?v=14c1559e">
 <script>
   (() => {
     const d = document.documentElement, m = matchMedia('(prefers-color-scheme: dark)'), q = new URLSearchParams(location.search).get('tema');
@@ -23,7 +24,7 @@
 <header class="adm-shapka">
   <a href="./" aria-label="Открыть сайт"><img src="img/znak.png" alt="NAFI" width="484" height="375"></a>
   <div>
-    <h1>Вещи и цены</h1>
+    <h1>Мой магазин</h1>
     <p class="adm-status" data-status>Загрузка…</p>
   </div>
   <a class="adm-na-sajt" href="./">На сайт</a>
@@ -37,9 +38,13 @@
   <p class="adm-oshibka" data-dostup-oshibka role="alert"></p>
 </section>
 
+<button class="knopka adm-novaya" type="button" data-novaya hidden>Новая вещь по фото</button>
+<section class="adm-magazin" data-obshchee hidden></section>
+
 <main class="adm-spisok" data-spisok></main>
 
-<p class="adm-novoe">Новую вещь добавляет Хаси: пришлите ему фото, название, возраст и цену.</p>
+<p class="adm-novoe" data-novoe-tekst>Новую вещь присылайте фото боту NAFI в Telegram.</p>
+<p class="adm-novoe" data-versiya></p>
 
 <div class="adm-niz">
   <span data-izmeneno>Изменений нет</span>
@@ -48,6 +53,7 @@
 </div>
 <div class="tost" data-tost role="status" aria-live="polite"></div>
 
-<script type="module" src="js/admin.js?v=e9d92d71"></script>
+<script src="js/version.js?v=14c1559e"></script>
+<script type="module" src="js/admin.js?v=14c1559e"></script>
 </body>
 </html>

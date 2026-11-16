@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<link rel="icon" href="img/znak.png">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#17120e" media="(prefers-color-scheme: dark)">
@@ -12,10 +13,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Prata&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/base.css?v=e9d92d71">
-<link rel="stylesheet" href="css/glavnaya.css?v=e9d92d71">
-<link rel="stylesheet" href="css/katalog.css?v=e9d92d71">
-<link rel="stylesheet" href="css/korzina.css?v=e9d92d71">
+<link rel="stylesheet" href="css/base.css?v=14c1559e">
+<link rel="stylesheet" href="css/glavnaya.css?v=14c1559e">
+<link rel="stylesheet" href="css/katalog.css?v=14c1559e">
+<link rel="stylesheet" href="css/korzina.css?v=14c1559e">
 <script>
   // Тема как на телефоне. ?tema=svet или ?tema=tma: для проверки
   (() => {
@@ -39,6 +40,8 @@
 </header>
 
 <main>
+  <!-- Акция: текст и включение у Миланы в мини-приложении «Мой магазин» -->
+  <a class="akciya" href="#katalog" data-akciya hidden><span data-akciya-tekst></span></a>
   <!-- Светлая тема телефона: арка -->
   <section class="glavnaya glavnaya-svet">
     <div class="glavnaya-tekst sloj-tekst">
@@ -78,7 +81,9 @@
   <section class="katalog" id="katalog">
     <div class="katalog-verh"><h2>Каталог</h2><span class="schet" data-schet></span></div>
     <div class="vozrasty" id="vozrast" data-vozrasty role="group" aria-label="Возраст ребёнка"></div>
+    <div class="vozrasty kategorii" data-kategorii role="group" aria-label="Что ищете" hidden></div>
     <div class="setka" data-setka></div>
+    <p class="katalog-pusto" data-pusto hidden>Таких вещей сейчас нет. Напишите нам в WhatsApp, подберём.</p>
   </section>
 
   <section class="o-nas" id="o-nas">
@@ -121,7 +126,7 @@
   </div>
 </dialog>
 
-<script type="module" src="js/korzina.js?v=e9d92d71"></script>
-<script type="module" src="js/dvizhenie.js?v=e9d92d71"></script>
+<script type="module" src="js/korzina.js?v=14c1559e"></script>
+<script type="module" src="js/dvizhenie.js?v=14c1559e"></script>
 </body>
 </html>
