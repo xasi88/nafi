@@ -3,12 +3,12 @@
 // - в Telegram (мини-приложение «Мой магазин», js/admin-tg.js): сохраняет бот NAFI, ключа в телефоне нет;
 // - в браузере с ключом GitHub (js/github.js): один коммит в data/tovary.json.
 // Новые вещи и новые фото идут через бота. Устройство: docs/ARCHITECTURE.md, «Страница Миланы».
-import { PUT, SKIDKI, zagruzit, rub, cenaSeychas, slit, oshibka, oshibkaObshchego, razmery, razmeryVozrasta, kategorii, chistyj } from './dannye.js?v=14c1559e';
-import { repo, proverit, prochitat, zapisat } from './github.js?v=14c1559e';
-import { TG, tgStart, tgZakryt, bot, sohranitCherezBota } from './admin-tg.js?v=14c1559e';
-import { narisovatObshchee, kategoriiSejchas } from './admin-obshchee.js?v=14c1559e';
+import { PUT, SKIDKI, zagruzit, rub, cenaSeychas, slit, oshibka, oshibkaObshchego, razmery, razmeryVozrasta, kategorii, chistyj } from './dannye.js?v=a36433cd';
+import { repo, proverit, prochitat, zapisat } from './github.js?v=a36433cd';
+import { TG, tgStart, tgZakryt, bot, sohranitCherezBota, cherezTelegram } from './admin-tg.js?v=a36433cd';
+import { narisovatObshchee, kategoriiSejchas } from './admin-obshchee.js?v=a36433cd';
 
-const KLYUCH = 'nafi-klyuch', CHERNOVIK = 'nafi-pravki';
+const KLYUCH = 'nafi-klyuch', CHERNOVIK = 'nafi-pravki', OTPRAVLENO = 'nafi-otpravleno';
 const hran = {
   get: (k) => { try { return localStorage.getItem(k); } catch { return null; } },
   set: (k, v) => { try { localStorage.setItem(k, v); } catch { /* без хранилища правки живут до перезагрузки */ } },
@@ -143,6 +143,7 @@ $('[data-spisok]').addEventListener('click', async (e) => {
   // Новое фото: бот ждёт его в чате, приложение закрывается
   if (e.target.closest('[data-foto]')) {
     try {
+      if (TG.klaviatura) return void cherezTelegram({ t: 'f', id, imya: ishod(id).name });
       await bot('/foto', { id, imya: ishod(id).name });
       tost('Пришлите фото в чат с ботом');
       setTimeout(tgZakryt, 900);
@@ -160,6 +161,7 @@ $('[data-otmena]').addEventListener('click', () => { pravki = {}; obshchee = {};
 
 $('[data-novaya]').addEventListener('click', async () => {
   try {
+    if (TG.klaviatura) return void cherezTelegram({ t: 'n' });
     await bot('/novaya');
     tost('Пришлите фото в чат с ботом');
     setTimeout(tgZakryt, 900);
@@ -187,7 +189,13 @@ $('[data-sohranit]').addEventListener('click', async () => {
   const knopka = $('[data-sohranit]');
   knopka.disabled = true; knopka.textContent = 'Сохраняю…';
   try {
-    if (TG) {
+    if (TG && TG.klaviatura) {
+      // Приложение закрывается, бот пишет в чат «Сохранил». Черновик остаётся до обновления сайта:
+      // при следующем открытии правки, которые уже на сайте, отпадут сами (chernovik)
+      if (!cherezTelegram({ t: 's', p: pravki, o: obshchee })) throw new Error('Слишком много правок сразу. Сохраните часть, потом остальное.');
+      hran.set(OTPRAVLENO, String(Date.now()));
+      return;
+    } else if (TG) {
       await sohranitCherezBota(pravki, obshchee);
       dannye = slit(dannye, pravki, obshchee);
     } else {
@@ -256,12 +264,17 @@ async function start() {
     tgStart();
     $('[data-novaya]').hidden = false;
     $('[data-novoe-tekst]').hidden = true;
-    try {
-      const kto = await bot('/vhod');
-      $('[data-status]').textContent = `Telegram: ${kto.imya}`;
-    } catch (err) {
-      $('[data-status]').textContent = err.message;
-      return;
+    // Кнопкой внизу чата: адрес бота не нужен, правки уходят через Telegram, чужие правки бот не примет
+    if (TG.klaviatura) {
+      $('[data-status]').textContent = 'Сохранение через бота NAFI';
+    } else {
+      try {
+        const kto = await bot('/vhod');
+        $('[data-status]').textContent = `Telegram: ${kto.imya}`;
+      } catch (err) {
+        $('[data-status]').textContent = 'Откройте «Мой магазин» кнопкой внизу чата с ботом';
+        return;
+      }
     }
     dannye = await zagruzit(`${PUT}?t=${Date.now()}`);
   } else {
@@ -279,7 +292,8 @@ async function start() {
   chernovik();
   $('[data-obshchee]').hidden = false;
   narisovatVse();
-  if (chislo()) tost('Есть несохранённые правки с прошлого раза');
+  const nedavno = Date.now() - Number(hran.get(OTPRAVLENO) || 0) < 3 * 60 * 1000;
+  if (chislo()) tost(nedavno ? 'Правки отправлены боту. Сайт обновится через 1-2 минуты.' : 'Есть несохранённые правки с прошлого раза');
 }
 
 // Номер версии внизу страницы (js/version.js)

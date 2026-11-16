@@ -1,6 +1,6 @@
 // NAFI: карточки вещей, фильтр по возрасту и категории, выбор размера, кнопки «В корзину» (js/korzina.js),
 // баннер акции. Вещи берутся из data/tovary.json (js/dannye.js). Скрытые Миланой вещи сайт не показывает.
-import { zagruzit, rub, cenaSeychas, cenaText, waUrl, veshchej, razmery, naSajte, kategorii, akciya } from './dannye.js?v=14c1559e';
+import { zagruzit, rub, cenaSeychas, cenaText, waUrl, veshchej, razmery, naSajte, kategorii, akciya } from './dannye.js?v=a36433cd';
 
 let TOVARY = [];
 const vybor = { vozrast: 'all', kategoriya: 'all' };

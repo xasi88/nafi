@@ -1,25 +1,35 @@
 // Страница Миланы внутри Telegram: мини-приложение «Мой магазин» (кнопка в боте NAFI). Вход без ключа GitHub:
 // Telegram кладёт данные входа в адрес страницы (#tgWebAppData=...), бот проверяет подпись (bot/src/prilozhenie.js)
 // и сам пишет правки в GitHub. Скрипт Telegram (telegram-web-app.js) не грузим: в России без VPN он не открывается.
-// Запросы к боту до 4 КБ: из России без VPN Cloudflare больше не принимает (замер Рамбургера 2026-11-08).
+// Запросы к адресу бота до 4 КБ: из России без VPN Cloudflare больше не принимает (замер Рамбургера 2026-11-08).
+// У Миланы адрес бота не открывается совсем, поэтому главный путь: через Telegram (cherezTelegram).
 
 const BOT = 'https://nafi-bot.gmarbigm.workers.dev';
 const KOPIYA = 'nafi-tg'; // данные входа на время вкладки: адрес страницы может потерять #
 const KUSOK = 1800;       // правки одного запроса без данных входа, знаков
+const TELEGRAM_BAJT = 4096; // sendData: не больше 4096 байт
 
-function dannyeVhoda() {
-  let d = '';
-  try { d = new URLSearchParams(location.hash.slice(1)).get('tgWebAppData') || ''; } catch { /* адрес без данных */ }
+// Данные Telegram из адреса страницы (#tgWebAppData=...&tgWebAppVersion=...&tgWebAppPlatform=...)
+function izAdresa() {
+  let h = '';
+  try { h = location.hash.slice(1); } catch { /* адрес без данных */ }
+  const est = /tgWebApp(Version|Platform|Data)=/.test(h);
   try {
-    if (d) sessionStorage.setItem(KOPIYA, d);
-    else d = sessionStorage.getItem(KOPIYA) || '';
+    if (est) sessionStorage.setItem(KOPIYA, h);
+    else h = sessionStorage.getItem(KOPIYA) || '';
   } catch { /* хранилище закрыто */ }
-  return d;
+  return new URLSearchParams(/tgWebApp/.test(h) ? h : '');
 }
 
-const initData = dannyeVhoda();
+const adres = izAdresa();
+const initData = adres.get('tgWebAppData') || '';
+const vTelegram = adres.has('tgWebAppVersion') || adres.has('tgWebAppPlatform') || !!initData || !!window.TelegramWebviewProxy;
+// Открыто кнопкой «Мой магазин» внизу чата: у такого приложения нет query_id, и правки уходят боту через Telegram
+// (sendData). Это работает у Миланы в Чечне без VPN, где Cloudflare не открывается (2026-11-16).
+// Открыто кнопкой под сообщением или в меню: sendData нет, правки идут на адрес бота (у автора с VPN работает).
+const klaviatura = !new URLSearchParams(initData).get('query_id');
 // null: страницу открыли в браузере, сохранение ключом GitHub (js/github.js)
-export const TG = initData ? { initData } : null;
+export const TG = vTelegram ? { initData, klaviatura } : null;
 
 // Сигналы Telegram, как в telegram-web-app.js: на телефоне TelegramWebviewProxy, в Telegram Web окно-родитель
 function signal(tip, dannye) {
@@ -56,7 +66,15 @@ export async function bot(put, telo = {}) {
   return j;
 }
 
-// Сохранение через бота: правки вещей частями, чтобы каждый запрос был маленьким. Общее (акция, категории) первым.
+// Через Telegram: приложение закрывается, бот отвечает в чате. Верно: true. Большое: false (сохранить частями).
+export function cherezTelegram(dannye) {
+  const tekst = JSON.stringify(dannye);
+  if (new TextEncoder().encode(tekst).length > TELEGRAM_BAJT) return false;
+  signal('web_app_data_send', { data: tekst });
+  return true;
+}
+
+// Сохранение через адрес бота: правки вещей частями, чтобы каждый запрос был маленьким. Общее (акция, категории) первым.
 export async function sohranitCherezBota(pravki, obshchee) {
   const kuski = [];
   let p = {};

@@ -1,6 +1,6 @@
 // Страница Миланы: общее для всего магазина. Акция (полоса вверху сайта) и список категорий.
 // Правки лежат в obshchee (js/admin.js) и сохраняются вместе с правками вещей.
-import { kategorii, latinica, chistyj, AKCIYA_DLINA } from './dannye.js?v=14c1559e';
+import { kategorii, latinica, chistyj, AKCIYA_DLINA } from './dannye.js?v=a36433cd';
 
 // Как сейчас, с правками
 export const akciyaSejchas = (d, o) => o.akciya || d.akciya || { vkl: false, tekst: '' };
